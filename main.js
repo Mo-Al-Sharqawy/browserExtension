@@ -1,32 +1,34 @@
-const inputEl = document.getElementById("input-el");
-const buttonEl = document.getElementById("button-el");
-const ulEl = document.getElementById("ul-el");
+let inputEl = document.getElementById("input-el");
+let buttonEl = document.getElementById("button-el");
+let ulEl = document.getElementById("ul-el");
 let myArray = [];
 let oldArray = [];
-const deleteBtn = document.getElementById("delete-btn");
-const getDataFromArray = JSON.parse(localStorage.getItem("myArray"));
+let deleteBtn = document.querySelector("#delete-el");
+let tabBtn = document.querySelector("#tab-btn");
+let myObj = [{ linkedin: "http://www.linkedin.com/" }];
 
-console.log(getDataFromArray);
-if (getDataFromArray) {
-  myArray = getDataFromArray;
+tabBtn.addEventListener("click", function () {
+  myArray.push(myObj[0].linkedin);
+  localStorage.setItem("myArray", JSON.stringify(myArray));
   render(myArray);
-}
-function render(lead) {
-  let x = "";
-  for (let i = 0; i < lead.length; i++) {
-    x += `<li> <a href='#' target='_blank'>${lead[i]}</a></li>`;
-  }
-  ulEl.innerHTML = x;
-}
+});
 
 deleteBtn.addEventListener("dblclick", function () {
   localStorage.clear();
   myArray = [];
   render(myArray);
 });
-// console.log(myArray);
+
+function render(array) {
+  let x = "";
+  for (let i = 0; i < array.length; i++) {
+    x += `<li><a href='${array[i]}'  target='_blank'>${array[i]} </a></li>`;
+  }
+  ulEl.innerHTML = x;
+}
 buttonEl.addEventListener("click", function () {
   myArray.push(inputEl.value);
+  inputEl.value = "";
   localStorage.setItem("myArray", JSON.stringify(myArray));
   console.log(localStorage.getItem("myArray"));
   render(myArray);
