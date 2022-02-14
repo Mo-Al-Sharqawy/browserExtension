@@ -5,12 +5,15 @@ let myArray = [];
 let oldArray = [];
 let deleteBtn = document.querySelector("#delete-el");
 let tabBtn = document.querySelector("#tab-btn");
-let myObj = [{ linkedin: "http://www.linkedin.com/" }];
+// let myObj = [{ linkedin: "http://www.linkedin.com/" }];
 
 tabBtn.addEventListener("click", function () {
-  myArray.push(myObj[0].linkedin);
-  localStorage.setItem("myArray", JSON.stringify(myArray));
-  render(myArray);
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    // console.log(tabs);
+    myArray.push(tabs[0].url);
+    localStorage.setItem("myArray", JSON.stringify(myArray));
+    render(myArray);
+  });
 });
 
 deleteBtn.addEventListener("dblclick", function () {
@@ -22,7 +25,11 @@ deleteBtn.addEventListener("dblclick", function () {
 function render(array) {
   let x = "";
   for (let i = 0; i < array.length; i++) {
-    x += `<li><a href='${array[i]}'  target='_blank'>${array[i]} </a></li>`;
+    x += `<li>
+        <a href='${array[i]}'  target='_blank'>
+              ${array[i]}
+        </a>
+    </li>`;
   }
   ulEl.innerHTML = x;
 }
